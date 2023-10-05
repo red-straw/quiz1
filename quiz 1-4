@@ -1,0 +1,27 @@
+프로세싱 코드
+import processing.net.*;
+
+Server server;
+String data = "";
+
+void setup() {
+  size(200, 200);
+  server = new Server(this, 12345);
+}
+
+void draw() {
+  
+  if (data.equals("1")) {
+    server.write("1");
+  } else if (data.equals("0")) {
+    server.write("0");
+  }
+}
+
+void keyPressed() {
+  if(key == '1' || key == '0') { 
+     data = str(key);
+     println(data);
+   }
+}
+
