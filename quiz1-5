@@ -1,1 +1,70 @@
+아두이노 코드
 
+const int ledPin = 7;
+const int speakerPin = 4;
+int note;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(speakerPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  if (Serial.available()) {
+    String data = Serial.readString();
+
+    if (data == "on") {
+      digitalWrite(ledPin, HIGH);
+    } 
+    else if (data == "off") {
+      digitalWrite(ledPin, LOW);
+    }
+    
+    else { 
+      note = data.toInt();
+
+      switch(note) {         // 음계 재생
+        case 1: tone(speakerPin,262); break;
+        case 2: tone(speakerPin,294); break;
+        case 3: tone(speakerPin,330); break;
+        case 4: tone(speakerPin,349); break;
+        case 5: tone(speakerPin,392); break;
+        case 6: tone(speakerPin,440); break;
+        case 7: tone(speakerPin,494); break;
+        case 8: noTone(speakerpin);
+      }
+      
+      delay(500);
+      noTone(SPEAKER_PIN);
+    }
+}
+
+
+processing 코드
+
+import processing.net.*;
+import processing.serial.*;
+
+Server server;
+Serial myPort;
+
+void setup() {
+  
+String portName = Serial.list()[0];
+myPort = new Serial(this,"COM8" ,9600);
+
+server=new Server(this ,12345 );
+}
+
+void draw() {
+
+Client thisClient=server.available();
+
+if(thisClient !=null){
+String whatclientSaid=thisClient.readString();
+whatclientSaid=trim(whatclientSaid);
+
+myPort.write(whatclientSaid);
+}
+}
